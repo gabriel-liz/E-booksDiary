@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:include="layout :: htmlhead"></head>
+<body>
+	<div class="container">
+		<nav th:replace="layout :: menu">(menu)</nav>
+		<a href="form.html" th:href="@{/livros/novo}"
+			class="btn btn-primary btn-lg" role="button">Novo</a>
+		<table class="table" id = "livros">
+			<thead>
+				<tr>
+					<td>Nome</td>
+					<td>Preço</td>
+					<td>Escritor</td>
+					<td>Editora</td>	
+					<td>Ano</td>
+					<td>Gênero</td>
+					<td>Status</td>														
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="umlivros : ${livros}">
+					<td th:text="${umlivros.nome}"></td>
+					<td th:text="${umlivros.preco}"></td>
+					<td th:text="${umlivros.escritor.nome}"></td>					
+					<td th:text="${umlivros.editora}"></td>
+					<td th:text="${umlivros.ano}"></td>
+					<td th:text="${umlivros.genero}"></td>
+					<td th:text="${umlivros.status.descricao}"></td>					
+					<td><a th:href="@{'/livros/alterar/' + ${umlivros.id}}"
+						class="btn btn-primary btn-lg">Alterar</a>						 
+						<button class='btn btn-danger btn-lg js-delete'
+							th:data-customer-id="${umlivros.id}">
+							<span class="oi oi-bug"></span>Excluir
+						</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div th:include="layout :: footer" id="footer">(footer)</div>
+	<script type="text/javascript"> 
+			$(document).ready(function(){
+				$("#livros").on("click", ".js-delete", function(){
+					var button = $(this);
+					bootbox.confirm("Voc� tem certeza que quer excluir este livro?",function(result){
+						if(result){
+							$.ajax({
+		                        url: "/livros/delete/" + button.attr("data-customer-id"),
+		                        method: "GET",
+		                        success: function () {
+		                        	window.location.href = "/livros/"
+		                        }
+		                    });
+						}
+					});
+				});
+			}); 
+		</script>
+</body>
+</html>

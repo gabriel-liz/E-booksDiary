@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:include="layout :: htmlhead"></head>
+<body>
+	<div class="container">
+		<nav th:replace="layout :: menu">(menu)</nav>
+		<a href="form.html" th:href="@{/compra/novo}"
+			class="btn btn-primary btn-lg" role="button">Novo</a>
+		<table class="table" id = "compra">
+			<thead>
+				<tr>
+					<td>Data</td>
+					<td>Cliente</td>
+					<td>Livro</td>																
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="umcompra : ${compra}">
+					<td th:text="${umcompra.data}"></td>
+					<td th:text="${umcompra.cliente.nome}"></td>										
+					<td><a th:href="@{'/compra/alterar/' + ${umcompra.id}}"
+						class="btn btn-primary btn-lg">Alterar</a>						 
+						<button class='btn btn-danger btn-lg js-delete'
+							th:data-customer-id="${umcompra.id}">
+							<span class="oi oi-bug"></span>Excluir
+						</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div th:include="layout :: footer" id="footer">(footer)</div>
+	<script type="text/javascript"> 
+			$(document).ready(function(){
+				$("#compra").on("click", ".js-delete", function(){
+					var button = $(this);
+					bootbox.confirm("Voc� tem certeza que quer excluir este compra?",function(result){
+						if(result){
+							$.ajax({
+		                        url: "/compra/delete/" + button.attr("data-customer-id"),
+		                        method: "GET",
+		                        success: function () {
+		                        	window.location.href = "/compra/"
+		                        }
+		                    });
+						}
+					});
+				});
+			}); 
+		</script>
+</body>
+</html>

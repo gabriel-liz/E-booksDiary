@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:include="layout :: htmlhead"></head>
+<body>
+	<div class="container">
+		<nav th:replace="layout :: menu">(menu)</nav>
+		<a href="form.html" th:href="@{/escritor/novo}"
+			class="btn btn-primary btn-lg" role="button">Novo</a>
+		<table class="table" id = "escritor">
+			<thead>
+				<tr>
+					<td>Nome</td>
+					<td>CPF</td>
+					<td>Endereço</td>										
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="umescritor : ${escritor}">
+					<td th:text="${umescritor.nome}"></td>
+					<td th:text="${umescritor.cpf}"></td>
+					<td th:text="${umescritor.endereco}"></td>					
+					<td><a th:href="@{'/escritor/alterar/' + ${umescritor.id}}"
+						class="btn btn-primary btn-lg">Alterar</a>						 
+						<button class='btn btn-danger btn-lg js-delete'
+							th:data-customer-id="${umescritor.id}">
+							<span class="oi oi-bug"></span>Excluir
+						</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div th:include="layout :: footer" id="footer">(footer)</div>
+	<script type="text/javascript"> 
+			$(document).ready(function(){
+				$("#escritor").on("click", ".js-delete", function(){
+					var button = $(this);
+					bootbox.confirm("Você tem certeza que quer excluir este escritor?",function(result){
+						if(result){
+							$.ajax({
+		                        url: "/escritor/delete/" + button.attr("data-customer-id"),
+		                        method: "GET",
+		                        success: function () {
+		                        	window.location.href = "/escritor/"
+		                        }
+		                    });
+						}
+					});
+				});
+			}); 
+		</script>
+</body>
+</html>

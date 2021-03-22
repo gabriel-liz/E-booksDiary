@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout :: htmlhead"></head>
+<body>
+	<div class="container">
+		<nav th:replace="layout :: menu">(menu)</nav>
+		<div class="border border-dark">
+			<form th:action="@{/livros/(form)}" th:object="${livros}" action="#"
+				method="post">
+				<input type="hidden" id="txtid" th:field="*{id}" />
+				<div class="form-group">
+					<label for="txtnome">Nome</label> <input type="text"
+						th:field="*{nome}" class="form-control" id="txtnome"
+						placeholder="Digite Nome">
+					<p th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"
+						class="alert alert-danger" />
+				</div>
+				<div class="form-group">
+					<label for="txtnome">Preço</label> <input type="text"
+						th:field="*{preco}" class="form-control" id="txtnome"
+						placeholder="Informe Preço">
+				</div>
+				<div class="form-group">
+					<label for="slcEscritor">Escritor</label> <select
+						class="form-control" id="slcescritor" th:field="*{escritor}">
+						<option th:each="umescritor : ${listaescritores}"
+							th:value="${umescritor.id}" th:text="${umescritor.nome}"></option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="txtnome">Editora</label> <input type="text"
+						th:field="*{editora}" class="form-control" id="txtnome"
+						placeholder="Digite Editora">
+				</div>
+				<div class="form-group">
+					<label for="txtnome">Ano</label> <input type="text"
+						th:field="*{ano}" class="form-control" id="txtnome"
+						placeholder="Digite Ano">
+				</div>
+				<div class="form-group">
+					<label for="txtgenero">Gênero</label> <input type="text"
+						th:field="*{nome}" class="form-control" id="txtgenero"
+						placeholder="Informe G�nero">
+				</div>
+				<div class="form-group">
+					<label for="slcStatus">Status</label> <select disabled class="form-control"
+						id="slcstatus" th:field="*{status}">
+						<option th:each="umstatus : ${listastatus}"
+							th:value="${umstatus.id}" th:text="${umstatus.descricao}"></option>
+					</select>
+				</div>
+				<button type="submit" class="btn btn-primary">Enviar</button>
+		</div>
+	</div>
+	<div th:include="layout :: footer" id="footer">(footer)</div>
+</body>
+</html>

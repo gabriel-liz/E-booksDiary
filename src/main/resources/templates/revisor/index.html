@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:include="layout :: htmlhead"></head>
+<body>
+	<div class="container">
+		<nav th:replace="layout :: menu">(menu)</nav>
+		<a href="form.html" th:href="@{/revisor/novo}"
+			class="btn btn-primary btn-lg" role="button">Novo</a>
+		<table class="table" id = "revisor">
+			<thead>
+				<tr>
+					<td>Nome</td>
+					<td>CPF</td>
+					<td>Endereço</td>
+					<td>Email</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="umrevisor : ${revisor}">
+					<td th:text="${umrevisor.nome}"></td>
+					<td th:text="${umrevisor.cpf}"></td>
+					<td th:text="${umrevisor.endereco}"></td>
+					<td th:text="${umrevisor.email}"></td>
+					<td><a th:href="@{'/revisor/alterar/' + ${umrevisor.id}}"
+						class="btn btn-primary btn-lg">Alterar</a>						 
+						<button class='btn btn-danger btn-lg js-delete'
+							th:data-customer-id="${umrevisor.id}">
+							<span class="oi oi-bug"></span>Excluir
+						</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div th:include="layout :: footer" id="footer">(footer)</div>
+	<script type="text/javascript"> 
+			$(document).ready(function(){
+				$("#revisor").on("click", ".js-delete", function(){
+					var button = $(this);
+					bootbox.confirm("Você tem certeza que quer excluir este revisor?",function(result){
+						if(result){
+							$.ajax({
+		                        url: "/revisor/delete/" + button.attr("data-customer-id"),
+		                        method: "GET",
+		                        success: function () {
+		                        	window.location.href = "/revisor/"
+		                        }
+		                    });
+						}
+					});
+				});
+			}); 
+		</script>
+</body>
+</html>
